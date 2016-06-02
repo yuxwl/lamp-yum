@@ -1,12 +1,12 @@
 ## 简介
 * 1. LAMP 指的是 Linux + Apache + MySQL + PHP 运行环境
-* 2. LAMP 一键安装是用 Linux Shell 语言编写的，用于在 Linux 系统(Redhat/CentOS/Fedora)上一键安装 LAMP 环境的工具脚本。
+* 2. LAMP 一键安装是用 Linux Shell 语言编写的，用于在 CentOS/Redhat 系统上一键安装 LAMP 环境的脚本。
 
 ## 本脚本的系统需求
 * 需要 2GB 及以上磁盘剩余空间
 * 需要 64M 及以上内存空间
 * 服务器必须配置好软件源和可连接外网
-* 必须具有系统 Root 权限
+* 必须具有系统 root 权限
 * 建议使用干净系统全新安装
 * 日期：2015 年 11 月 01 日
 
@@ -56,12 +56,12 @@
 ##命令一览：
 * MySQL 或 MariaDB 命令: 
 
-        /etc/init.d/mysqld(start|stop|restart|reload|status)
+        /etc/init.d/mysqld (start|stop|restart|reload|status)
 
 * Apache 命令: 
 
-        /etc/init.d/httpd(start|stop|restart|reload|status)
+        /etc/init.d/httpd (start|stop|restart|reload|status)
 
 如果你在安装后使用遇到问题，请访问 [https://teddysun.com/lamp-yum](https://teddysun.com/lamp-yum) 提交评论。
 
-Copyright (C) 2015 Teddysun <i@teddysun.com>
+Copyright (C) 2014-2016 Teddysun <i@teddysun.com>
