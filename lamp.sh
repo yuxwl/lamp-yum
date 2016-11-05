@@ -1,41 +1,18 @@
-#! /bin/bash
+#!/usr/bin/env bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
-#===============================================================================================
-#   System Required:  CentOS / RedHat / Fedora
-#   Description:  Yum Install LAMP(Linux + Apache + MySQL/MariaDB + PHP )
-#   Author: Teddysun <i@teddysun.com>
-#   Intro:  https://teddysun.com/lamp-yum
-#           https://github.com/teddysun/lamp-yum
-#===============================================================================================
+#==========================================================================#
+#   System Required:  CentOS 6+                                            #
+#   Description:  Yum Install LAMP(Linux + Apache + MySQL/MariaDB + PHP )  #
+#   Author: Teddysun <i@teddysun.com>                                      #
+#   Intro:  https://teddysun.com/lamp-yum                                  #
+#           https://github.com/teddysun/lamp-yum                           #
+#==========================================================================#
 
 clear
 
 # Current folder
 cur_dir=`pwd`
-
-# Install LAMP Script
-install_lamp(){
-    rootness
-    disable_selinux
-    pre_installation_settings
-    install_apache
-    install_database
-    install_php
-    install_phpmyadmin
-    cp -f $cur_dir/lamp.sh /usr/bin/lamp
-    chmod +x /usr/bin/lamp
-    clear
-    echo
-    echo 'Congratulations, Yum install LAMP completed!'
-    echo "Your Default Website: http://$(get_ip)"
-    echo 'Default WebSite Root Dir: /data/www/default'
-    echo "MySQL root password:$dbrootpwd"
-    echo
-    echo "Welcome to visit:https://teddysun.com/lamp-yum"
-    echo "Enjoy it! "
-    echo
-}
 
 # Make sure only root can run our script
 rootness(){
@@ -164,7 +141,7 @@ install_apache(){
     echo "Start Installing Apache..."
     yum -y install httpd
     cp -f $cur_dir/conf/httpd.conf /etc/httpd/conf/httpd.conf
-    rm -f /etc/httpd/conf.d/welcome.conf /data/www/error/noindex.html
+    rm -fv /etc/httpd/conf.d/welcome.conf /data/www/error/noindex.html
     chkconfig httpd on
     mkdir -p /data/www/default
     chown -R apache:apache /data/www/default
@@ -286,9 +263,9 @@ EOF
 install_phpmyadmin(){
     if [ ! -d /data/www/default/phpmyadmin ];then
         echo "Start Installing phpMyAdmin..."
-        LATEST_PMA=$(curl -s https://www.phpmyadmin.net/files/ | awk -F\> '/\/files\//{print $3}' | grep '4.4' | cut -d'<' -f1 | sort -V | tail -1)
+        LATEST_PMA=$(wget --no-check-certificate -qO- https://www.phpmyadmin.net/files/ | awk -F\> '/\/files\//{print $3}' | grep '4.4' | cut -d'<' -f1 | sort -V | tail -1)
         if [[ -z $LATEST_PMA ]]; then
-            LATEST_PMA=$(curl -s http://dl.teddysun.com/pmalist.txt | grep '4.4' | tail -1 | awk -F- '{print $2}')
+            LATEST_PMA=$(wget -qO- http://dl.lamp.sh/pmalist.txt | grep '4.4' | tail -1 | awk -F- '{print $2}')
         fi
         echo -e "Installing phpmyadmin version: \033[41;37m $LATEST_PMA \033[0m"
         cd $cur_dir
@@ -502,6 +479,29 @@ vhost_del(){
 # List apache virtualhost
 vhost_list(){
     ls /etc/httpd/conf.d/ | grep -v "php.conf" | grep -v "none.conf" | grep -v "welcome.conf" | grep -iv "README" | awk -F".conf" '{print $1}'
+}
+
+# Install LAMP Script
+install_lamp(){
+    rootness
+    disable_selinux
+    pre_installation_settings
+    install_apache
+    install_database
+    install_php
+    install_phpmyadmin
+    cp -f $cur_dir/lamp.sh /usr/bin/lamp
+    chmod +x /usr/bin/lamp
+    clear
+    echo
+    echo 'Congratulations, Yum install LAMP completed!'
+    echo "Your Default Website: http://$(get_ip)"
+    echo 'Default WebSite Root Dir: /data/www/default'
+    echo "MySQL root password:$dbrootpwd"
+    echo
+    echo "Welcome to visit:https://teddysun.com/lamp-yum"
+    echo "Enjoy it! "
+    echo
 }
 
 # Initialization step
