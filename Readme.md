@@ -1,67 +1,69 @@
-## 简介
-* 1. LAMP 指的是 Linux + Apache + MySQL + PHP 运行环境
-* 2. LAMP 一键安装是用 Linux Shell 语言编写的，用于在 CentOS/Redhat 系统上一键安装 LAMP 环境的脚本。
+![LAMP](https://github.com/teddysun/lamp-yum/raw/master/conf/lamp.gif)
+Description
+===========
+LAMP is a powerful bash script for the installation of Apache + PHP + MySQL/MariaDB and so on. You can install Apache + PHP + MySQL/MariaDB in a smaller memory VPS by yum command, Just need to input numbers to choose what you want to install before installation. And all things will be done in a few minutes.
 
-## 本脚本的系统需求
-* 需要 2GB 及以上磁盘剩余空间
-* 需要 64M 及以上内存空间
-* 服务器必须配置好软件源和可连接外网
-* 必须具有系统 root 权限
-* 建议使用干净系统全新安装
-* 日期：2015 年 11 月 01 日
+Supported System
+===============
+- CentOS-6.x
+- CentOS-7.x
 
-## 关于本脚本
-* 一键 yum 安装所有的软件包，方便升级；
-* 支持 PHP 自带所有组件；
-* 支持 MySQL ，MariaDB 数据库;
-* 支持 XCache；
-* 支持 Zend Guard Loader；
-* 支持 ionCube PHP Loader；
-* 支持自助升级 phpMyAdmin；
-* 命令行新增虚拟主机，操作简便；
-* 一键卸载。
+System requirements
+===================
+- Hard disk space: 2GB
+- RAM: 64MB
+- An internet connection is required
+- Correct repository
+- User: root
 
-## 将会安装（通过 yum 安装）
-* 1、Apache (Default version)
-* 2、MySQL 5.5 or MariaDB 5.5 latest version
-* 3、PHP 5.4 or 5.5 or 5.6 latest version
-* 4、phpMyAdmin 4.4 latest version
-* 5、Xcache (PHP 5.4 only)
-* 6、Zend Guard Loader (PHP 5.4 only)
-* 7、ionCube PHP Loader (PHP 5.4 only)
+Supported Software
+==================
+- Apache-2.2 for CentOS-6.x
+- Apache-2.4 for CentOS-7.x
+- MySQL-5.5 MariaDB-5.5
+- PHP-5.4 PHP-5.5 PHP-5.6
+- PHP Module: XCache, Zend Guard Loader, ionCube Loader (PHP 5.4 only)
+- phpMyAdmin
 
-## 如何安装
-### 第一步，下载、解压、赋予权限：
+Installation
+============
+```bash
+yum -y install wget unzip
+wget --no-check-certificate -O lamp-yum.zip https://github.com/teddysun/lamp-yum/archive/master.zip
+unzip lamp-yum.zip
+cd lamp-yum-master
+chmod +x *.sh
+./lamp.sh 2>&1 | tee lamp.log
+```
 
-    yum install -y unzip
-    wget --no-check-certificate https://github.com/teddysun/lamp-yum/archive/master.zip -O lamp-yum.zip
-    unzip lamp-yum.zip
-    cd lamp-yum-master/
-    chmod +x *.sh
+Uninstall
+=========
+```bash
+./uninstall.sh
+```
 
-### 第二步，安装LAMP
-终端中输入以下命令：
+Default Location
+================
+| Apache Location            | Path                                     |
+|----------------------------|------------------------------------------|
+| Web root location          | /data/www/default                        |
+| Main Configuration File    | /etc/httpd/conf/httpd.conf               |
 
-    ./lamp.sh 2>&1 | tee lamp.log
+| MySQL Location             | Path                                     |
+|----------------------------|------------------------------------------|
+| Data Location              | /var/lib/mysql                           |
+| my.cnf Configuration File  | /etc/my.cnf                              |
 
-##使用提示：
+Process Management
+==================
+| Process     | Command                                                 |
+|-------------|---------------------------------------------------------|
+| Apache      | /etc/init.d/httpd  (start\|stop\|status\|restart)       |
+| MySQL       | /etc/init.d/mysqld (start\|stop\|status\|restart)       |
+| MariaDB     | /etc/init.d/mysqld (start\|stop\|status\|restart)       |
 
-* lamp uninstall：一键删除 LAMP （切记，删除之前注意备份好数据！）
+License
+=======
+Copyright (C) 2014 - 2016 Teddysun
 
-##目录说明：
-
-* MySQL 或 MariaDB 数据库目录： /var/lib/mysql/
-* 默认的网站根目录： /data/www/default
-
-##命令一览：
-* MySQL 或 MariaDB 命令: 
-
-        /etc/init.d/mysqld (start|stop|restart|reload|status)
-
-* Apache 命令: 
-
-        /etc/init.d/httpd (start|stop|restart|reload|status)
-
-如果你在安装后使用遇到问题，请访问 [https://teddysun.com/lamp-yum](https://teddysun.com/lamp-yum) 提交评论。
-
-Copyright (C) 2014-2016 Teddysun <i@teddysun.com>
+Licensed under the [GPLv3](LICENSE) License.
