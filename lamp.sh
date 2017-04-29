@@ -152,6 +152,7 @@ install_apache(){
     cp -f $cur_dir/conf/index_cn.html /data/www/default/
     cp -f $cur_dir/conf/lamp.gif /data/www/default/
     cp -f $cur_dir/conf/p.php /data/www/default/
+    cp -f $cur_dir/conf/p_cn.php /data/www/default/
     cp -f $cur_dir/conf/jquery.js /data/www/default/
     cp -f $cur_dir/conf/phpinfo.php /data/www/default/
     echo "Apache Install completed!"
