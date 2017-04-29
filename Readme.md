@@ -52,7 +52,7 @@ phpMyAdmin Upgrade
 Uninstall
 =========
 ```bash
-./uninstall.sh
+./lamp.sh uninstall
 ```
 
 Default Location
