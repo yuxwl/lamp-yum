@@ -38,6 +38,16 @@ get_ip(){
     [ ! -z ${IP} ] && echo ${IP} || echo
 }
 
+get_char(){
+    SAVEDSTTY=`stty -g`
+    stty -echo
+    stty cbreak
+    dd if=/dev/tty bs=1 count=1 2> /dev/null
+    stty -raw
+    stty echo
+    stty $SAVEDSTTY
+}
+
 # Pre-installation settings
 pre_installation_settings(){
     echo
@@ -109,15 +119,7 @@ pre_installation_settings(){
         echo "Input error! Please only input number 1,2,3"
     esac
     done
-    get_char(){
-        SAVEDSTTY=`stty -g`
-        stty -echo
-        stty cbreak
-        dd if=/dev/tty bs=1 count=1 2> /dev/null
-        stty -raw
-        stty echo
-        stty $SAVEDSTTY
-    }
+
     echo
     echo "Press any key to start...or Press Ctrl+C to cancel"
     char=`get_char`
@@ -146,11 +148,12 @@ install_apache(){
     mkdir -p /data/www/default
     chown -R apache:apache /data/www/default
     touch /etc/httpd/conf.d/none.conf
-    cp -f $cur_dir/conf/index.html /data/www/default/index.html
-    cp -f $cur_dir/conf/lamp.gif /data/www/default/lamp.gif
-    cp -f $cur_dir/conf/p.php /data/www/default/p.php
-    cp -f $cur_dir/conf/jquery.js /data/www/default/jquery.js
-    cp -f $cur_dir/conf/phpinfo.php /data/www/default/phpinfo.php
+    cp -f $cur_dir/conf/index.html /data/www/default/
+    cp -f $cur_dir/conf/index_cn.html /data/www/default/
+    cp -f $cur_dir/conf/lamp.gif /data/www/default/
+    cp -f $cur_dir/conf/p.php /data/www/default/
+    cp -f $cur_dir/conf/jquery.js /data/www/default/
+    cp -f $cur_dir/conf/phpinfo.php /data/www/default/
     echo "Apache Install completed!"
 }
 
@@ -314,15 +317,6 @@ uninstall_lamp(){
         exit
     fi
 
-    get_char(){
-        SAVEDSTTY=`stty -g`
-        stty -echo
-        stty cbreak
-        dd if=/dev/tty bs=1 count=1 2> /dev/null
-        stty -raw
-        stty echo
-        stty $SAVEDSTTY
-    }
     echo "Press any key to start uninstall...or Press Ctrl+c to cancel"
     char=`get_char`
     echo
@@ -451,15 +445,7 @@ vhost_del(){
     echo "vhost account = $vhost_domain"
     echo "---------------------------"
     echo
-    get_char(){
-        SAVEDSTTY=`stty -g`
-        stty -echo
-        stty cbreak
-        dd if=/dev/tty bs=1 count=1 2> /dev/null
-        stty -raw
-        stty echo
-        stty $SAVEDSTTY
-    }
+
     echo "Press any key to start delete vhost...or Press Ctrl+c to cancel"
     echo
     char=`get_char`

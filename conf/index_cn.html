@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>LAMP一键安装包 by Teddysun</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="keywords" content="LAMP,LAMP一键安装包,一键安装包">
+    <meta name="description" content="您已成功安装LAMP一键安装包！">
+    <style type="text/css">
+        body {
+            color: #333333;
+            font-family: "Microsoft YaHei", tahoma, arial, helvetica, sans-serif;
+            font-size: 14px;
+        }
+        
+        .links {
+            color: #06C
+        }
+        
+        #main {
+            margin-right: auto;
+            margin-left: auto;
+            width: 650px;
+        }
+        
+        a {
+            text-decoration: none;
+            color: #06C;
+            -webkit-transition: color .2s;
+            -moz-transition: color .2s;
+            -ms-transition: color .2s;
+            -o-transition: color .2s;
+            transition: color .2s
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main">
+        <p align="center"><span style="font-size:18px;color:red;">恭喜，LAMP 一键 yum 安装包安装成功！</span></p>
+        <p align="center"><img src="./lamp.gif" alt="LAMP一键安装包"></p>
+        <p align="left">
+            <span><b>查看本地环境：</b></span>
+            <a href="./p.php" target="_blank" class="links">PHP探针</a>
+            <a href="./phpinfo.php" target="_blank" class="links">phpinfo</a>
+            <a href="./phpmyadmin/" target="_blank" class="links">phpMyAdmin</a>
+            <a href="./index.html" target="_blank" class="links">English</a>
+        </p>
+        <p align="left"><span><strong>phpMyAdmin 升级方法：</strong></span></p>
+        <p>
+            <li>执行脚本：
+                <font color="#008000"> ./update_phpmyadmin.sh</font>
+            </li>
+        </p>
+        <p align="left"><span><strong>LAMP 卸载方法：</strong></span></p>
+        <p align="left">
+            <li>执行脚本：
+                <font color="#008000">./lamp.sh uninstall</font>
+            </li>
+        </p>
+        <p align="left"><span><strong>默认位置：</strong></span></p>
+        <p align="left">
+            <li>网站根目录：/data/www/default</li>
+        </p>
+        <p align="left"><span><strong>可用命令一览：</strong></span></p>
+        <p>
+            <li>Apache：/etc/init.d/httpd (start|stop|restart|status)</li>
+        </p>
+        <p>
+            <li>MySQL：/etc/init.d/mysqld (start|stop|restart|status)</li>
+        </p>
+        <p>
+            <li>MariaDB：/etc/init.d/mysqld (start|stop|restart|status)</li>
+        </p>
+        <p align="left"><span><strong>关于本脚本：</strong></span></p>
+        <p>
+            <li>1、本脚本全部采用 yum 安装，升级命令：yum -y update；</li>
+        </p>
+        <p>
+            <li>2、Apache 为系统默认版本，MySQL 或 MariaDB，PHP 则是 <a href="http://www.atomicorp.com/channels/atomic/" target="_blank">Atomic repository </a>的最新版。</li>
+        </p>
+        <p>
+            <li>3、如果你的 VPS 内存 ≥ 256M，建议编译安装 LAMP，详见：<a href="https://lamp.sh" target="_blank">LAMP一键安装脚本</a></li>
+        </p>
+        <p align="left"><span><strong>更多说明详见：</strong></span></p>
+        <p>
+            <li><a href="https://github.com/teddysun/lamp-yum" target="_blank">Github 项目地址</a></li>
+        </p>
+        <p>
+            <li><a href="https://teddysun.com/lamp-yum" target="_blank">项目官方网址</a></li>
+        </p>
+        <p align="center">
+            <hr>
+        </p>
+        <p align="center">LAMP一键 yum 安装包 by <a href="https://teddysun.com/lamp-yum" target="_blank">Teddysun</a></p>
+    </div>
+</body>
+
+</html>
