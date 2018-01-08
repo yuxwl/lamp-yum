@@ -60,7 +60,7 @@ pre_installation_settings(){
     # Install Atomic repository
     rpm -qa | grep "atomic-release" &>/dev/null
     if [ $? -ne 0 ]; then
-        wget -qO- http://www.atomicorp.com/installers/atomic | bash
+        wget -qO- https://www.atomicorp.com/installers/atomic | bash
     fi
     echo "Getting Public IP address..."
     echo -e "Your main public IP is\t\033[32m$(get_ip)\033[0m"
@@ -104,10 +104,11 @@ pre_installation_settings(){
     echo -e "\t\033[32m1\033[0m. Install PHP-5.4"
     echo -e "\t\033[32m2\033[0m. Install PHP-5.5"
     echo -e "\t\033[32m3\033[0m. Install PHP-5.6"
+    echo -e "\t\033[32m4\033[0m. Install PHP-7.0"
     read -p "Please input a number:(Default 1) " PHP_version
     [ -z "$PHP_version" ] && PHP_version=1
     case $PHP_version in
-        1|2|3)
+        1|2|3|4)
         echo
         echo "---------------------------"
         echo "You choose = $PHP_version"
@@ -116,7 +117,7 @@ pre_installation_settings(){
         break
         ;;
         *)
-        echo "Input error! Please only input number 1,2,3"
+        echo "Input error! Please only input number 1,2,3,4"
     esac
     done
 
@@ -257,6 +258,37 @@ EOF
 AddHandler php5-script .php
 AddType text/html .php
 DirectoryIndex index.php
+<IfModule  mod_php5.c>
+    <FilesMatch \.php$>
+        SetHandler application/x-httpd-php
+    </FilesMatch>
+    php_value session.save_handler "files"
+    php_value session.save_path    "/var/lib/php/session"
+    php_value soap.wsdl_cache_dir  "/var/lib/php/wsdlcache"
+</IfModule>
+EOF
+    fi
+    if [ $PHP_version -eq 4 ]; then
+        yum -y install atomic-php70-php atomic-php70-php-cli atomic-php70-php-common atomic-php70-php-devel atomic-php70-php-pdo atomic-php70-php-mysqlnd atomic-php70-php-mcrypt atomic-php70-php-mbstring atomic-php70-php-xml atomic-php70-php-xmlrpc
+        yum -y install atomic-php70-php-gd atomic-php70-php-bcmath atomic-php70-php-imap atomic-php70-php-odbc atomic-php70-php-ldap atomic-php70-php-json atomic-php70-php-intl
+        yum -y install atomic-php70-php-gmp atomic-php70-php-snmp atomic-php70-php-soap atomic-php70-php-tidy atomic-php70-php-opcache atomic-php70-php-enchant
+        # Fix php for httpd configuration
+        cat > /etc/httpd/conf.d/php70.conf<<EOF
+<IfModule !mod_php5.c>
+  <IfModule prefork.c>
+    LoadModule php7_module modules/libatomic_php70.so
+  </IfModule>
+</IfModule>
+AddType text/html .php
+DirectoryIndex index.php
+<IfModule  mod_php7.c>
+    <FilesMatch \.php$>
+        SetHandler application/x-httpd-php
+    </FilesMatch>
+    php_value session.save_handler "files"
+    php_value session.save_path    "/opt/atomic/atomic_php70/root/var/lib/php/session"
+    php_value soap.wsdl_cache_dir  "/opt/atomic/atomic_php70/root/var/lib/php/wsdlcache"
+</IfModule>
 EOF
     fi
     cp -f $cur_dir/conf/php.ini /etc/php.ini
@@ -267,9 +299,9 @@ EOF
 install_phpmyadmin(){
     if [ ! -d /data/www/default/phpmyadmin ];then
         echo "Start Installing phpMyAdmin..."
-        LATEST_PMA=$(wget --no-check-certificate -qO- https://www.phpmyadmin.net/files/ | awk -F\> '/\/files\//{print $3}' | grep '4.4' | cut -d'<' -f1 | sort -V | tail -1)
+        LATEST_PMA=$(wget --no-check-certificate -qO- https://www.phpmyadmin.net/files/ | awk -F\> '/\/files\//{print $3}' | cut -d'<' -f1 | sort -V | tail -1)
         if [[ -z $LATEST_PMA ]]; then
-            LATEST_PMA=$(wget -qO- http://dl.lamp.sh/pmalist.txt | grep '4.4' | tail -1 | awk -F- '{print $2}')
+            LATEST_PMA=$(wget -qO- http://dl.lamp.sh/pmalist.txt | tail -1 | awk -F- '{print $2}')
         fi
         echo -e "Installing phpmyadmin version: \033[41;37m $LATEST_PMA \033[0m"
         cd $cur_dir
@@ -336,6 +368,8 @@ uninstall_lamp(){
             yum -y remove atomic-php55-php*
         elif [ -s /usr/bin/atomic-php56-php ]; then
             yum -y remove atomic-php56-php*
+        elif [ -s /usr/bin/atomic_php70 ]; then
+            yum -y remove atomic-php70-php*
         else
             yum -y remove php*
         fi
