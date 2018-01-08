@@ -37,9 +37,9 @@ else
     fi
 fi
 
-LATEST_PMA=$(wget --no-check-certificate -qO- https://www.phpmyadmin.net/files/ | awk -F\> '/\/files\//{print $3}' | grep '4.4' | cut -d'<' -f1 | sort -V | tail -1)
+LATEST_PMA=$(wget --no-check-certificate -qO- https://www.phpmyadmin.net/files/ | awk -F\> '/\/files\//{print $3}' | cut -d'<' -f1 | sort -V | tail -1)
 if [[ -z $LATEST_PMA ]]; then
-    LATEST_PMA=$(wget -qO- http://dl.lamp.sh/pmalist.txt | grep '4.4' | tail -1 | awk -F- '{print $2}')
+    LATEST_PMA=$(wget -qO- http://dl.lamp.sh/pmalist.txt | tail -1 | awk -F- '{print $2}')
 fi
 echo -e "Latest version of phpmyadmin: \033[41;37m $LATEST_PMA \033[0m"
 echo -e "Installed version of phpmyadmin: \033[41;37m $INSTALLED_PMA \033[0m"
@@ -72,17 +72,17 @@ function untar(){
     if [ -n $1 ]; then
         SOFTWARE_NAME=`echo $1 | awk -F/ '{print $NF}'`
         TARBALL_TYPE=`echo $1 | awk -F. '{print $NF}'`
-        wget -c -t3 -T3 $1 -P $cur_dir/
+        wget --no-check-certificate -c -t3 -T3 $1 -P $cur_dir/
         if [ $? -ne 0 ];then
             rm -rf $cur_dir/$SOFTWARE_NAME
-            wget -c -t3 -T60 $2 -P $cur_dir/
+            wget --no-check-certificate -c -t3 -T60 $2 -P $cur_dir/
             SOFTWARE_NAME=`echo $2 | awk -F/ '{print $NF}'`
             TARBALL_TYPE=`echo $2 | awk -F. '{print $NF}'`
         fi
     else
         SOFTWARE_NAME=`echo $2 | awk -F/ '{print $NF}'`
         TARBALL_TYPE=`echo $2 | awk -F. '{print $NF}'`
-        wget -c -t3 -T3 $2 -P $cur_dir/ || exit
+        wget --no-check-certificate -c -t3 -T3 $2 -P $cur_dir/ || exit
     fi
     EXTRACTED_DIR=`tar tf $cur_dir/$SOFTWARE_NAME | tail -n 1 | awk -F/ '{print $1}'`
     case $TARBALL_TYPE in
@@ -113,8 +113,8 @@ if [[ "$UPGRADE_PMA" = "y" || "$UPGRADE_PMA" = "Y" ]];then
         echo "phpMyAdmin folder not found!"
     fi
     if [ ! -s phpMyAdmin-$LATEST_PMA-all-languages.tar.gz ]; then
-        LATEST_PMA_LINK="http://files.phpmyadmin.net/phpMyAdmin/${LATEST_PMA}/phpMyAdmin-${LATEST_PMA}-all-languages.tar.gz"
-        BACKUP_PMA_LINK="http://dl.lamp.sh/files/phpMyAdmin-${LATEST_PMA}-all-languages.tar.gz"
+        LATEST_PMA_LINK="https://files.phpmyadmin.net/phpMyAdmin/${LATEST_PMA}/phpMyAdmin-${LATEST_PMA}-all-languages.tar.gz"
+        BACKUP_PMA_LINK="https://dl.lamp.sh/files/phpMyAdmin-${LATEST_PMA}-all-languages.tar.gz"
         untar $LATEST_PMA_LINK $BACKUP_PMA_LINK
         mkdir -p /data/www/default/phpmyadmin
         mv * /data/www/default/phpmyadmin
