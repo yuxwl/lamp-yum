@@ -70,7 +70,7 @@ pre_installation_settings(){
     do
     echo "Please choose a version of the Database:"
     echo -e "\t\033[32m1\033[0m. Install MySQL-5.5(recommend)"
-    echo -e "\t\033[32m2\033[0m. Install MariaDB-5.5"
+    echo -e "\t\033[32m2\033[0m. Install MariaDB-10.2"
     read -p "Please input a number:(Default 1) " DB_version
     [ -z "$DB_version" ] && DB_version=1
     case $DB_version in
@@ -171,8 +171,16 @@ install_database(){
 # Install MariaDB
 install_mariadb(){
     # Install MariaDB
+    echo "# MariaDB 10.2 CentOS repository list - created 2017-07-03 06:59 UTC
+# http://downloads.mariadb.org/mariadb/repositories/
+[mariadb]
+name = MariaDB
+baseurl = https://mirrors.ustc.edu.cn/mariadb/yum/10.2/centos6-amd64
+gpgkey=https://mirrors.ustc.edu.cn/mariadb/yum/RPM-GPG-KEY-MariaDB
+gpgcheck=1" > /etc/yum.repos.d/MariaDB.repo
+
     echo "Start Installing MariaDB..."
-    yum -y install mariadb mariadb-server
+    yum -y install MariaDB-server MariaDB-client
     cp -f $cur_dir/conf/my.cnf /etc/my.cnf
     chkconfig mysqld on
     # Start mysqld service
@@ -510,7 +518,7 @@ install_lamp(){
     install_apache
     install_database
     install_php
-    install_phpmyadmin
+    #install_phpmyadmin
     cp -f $cur_dir/lamp.sh /usr/bin/lamp
     chmod +x /usr/bin/lamp
     clear
